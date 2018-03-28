@@ -11,20 +11,30 @@ import SideBar from './sidebar';
 import Room from './room';
 import Footer from './footer';
 import io from "socket.io-client";
-const socket = io(`${window.location.origin}`);
 
 class Chat extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
       messages: [],
-      unread: true,
-      newMsg:{}
+      newMsg: {}
     };
+
+    this.socket = io(`${window.location.origin}`);
+
+    this.socket.on('RECEIVE_MESSAGE', (data) => {
+      this.addMessage(data);
+    });
+    this.socket.emit('GET_ALL_MESSAGES');
+    this.socket.on('RECEIVE_ALL_MESSAGE', (messages) => {
+      this.recevieAllMessage(messages);
+    });
+
     this.showNotifications = this.showNotifications.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    socket.emit('GET_ALL_MESSAGES');
   }
+
   showNotifications() {
     if (this.n.supported()) this.n.show();
   }
@@ -32,35 +42,33 @@ class Chat extends Component {
   handleClick(event) {
     this.n.close(event.target.tag);
   }
+
+  recevieAllMessage = data => {
+    if (this.refs.chatRef)
+      this.setState({ messages: data });
+  }
+
+  addMessage = data => {
+    if (this.refs.chatRef)
+      this.setState({ messages: [...this.state.messages, data], newMsg: data }, this.showNotifications);
+  }
+
   componentWillMount() {
-
-    socket.on('RECEIVE_ALL_MESSAGE', (messages) => {
-      this.setState({ messages: messages });
-    });
-
-    socket.on('RECEIVE_MESSAGE', (data) => {
-      const { messages } = this.state;
-      messages.push(data);
-      this.setState({ messages: messages, newMsg: data }, this.showNotifications);
-    });
-
     if (!this.props.currentUser) {
       browserHistory.push('/login');
     }
   }
+
   componentWillReceiveProps(nextProps) {
     if (!nextProps.currentUser) {
       browserHistory.push('/login');
     }
   }
-  componentDidMount() {
-
-  }
 
   render() {
-    const { messages ,newMsg} = this.state;
+    const { messages, newMsg } = this.state;
     return (
-      <div className="main" >
+      <div className="main" ref="chatRef">
         <Header />
         <div className="container-fluid">
           <Room messages={messages} />

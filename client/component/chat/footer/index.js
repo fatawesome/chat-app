@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import io from "socket.io-client";
-const socket = io(`${window.location.origin}`);
 export default class Footer extends Component {
   constructor(props) {
     super(props);
@@ -8,6 +7,8 @@ export default class Footer extends Component {
       messages: [],
       msg: ''
     }
+    this.socket = io(`${window.location.origin}`);
+
   }
 
   _onChangeHandler(e) {
@@ -30,7 +31,7 @@ export default class Footer extends Component {
         this.setState({ msg: '', messages: [] });
         if (msg != '') messages.push(msg);
         const data = { message: messages, userID: currentUser._id, userName: currentUser.userName }
-        socket.emit('SEND_MESSAGE', { ...data });
+        this.socket.emit('SEND_MESSAGE', { ...data });
       }
     }
   }

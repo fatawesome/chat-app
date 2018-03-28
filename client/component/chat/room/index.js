@@ -16,7 +16,7 @@ export default class Room extends Component {
   scrollToBottom() {
     this.el.scrollIntoView({ behavior: 'smooth' });
   }
-  
+
   render() {
     const { messages } = this.props;
     return (
