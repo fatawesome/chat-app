@@ -18,7 +18,8 @@ class Chat extends Component {
     super(props);
     this.state = {
       messages: [],
-      newMsg: {}
+      newMsg: {},
+      tabFocused: true
     };
 
     this.socket = io(`${window.location.origin}`);
@@ -33,10 +34,20 @@ class Chat extends Component {
 
     this.showNotifications = this.showNotifications.bind(this);
     this.handleClick = this.handleClick.bind(this);
+
+    window.addEventListener('focus', (e) => {
+      if (this.refs.chatRef)
+        document.title = "Chat App";
+    });
+
+    window.addEventListener('blur', (e) => {
+      if (this.refs.chatRef)
+        this.setState({ tabFocused: false });
+    })
   }
 
   showNotifications() {
-    if (this.n.supported()) this.n.show();
+    if (this.n.supported() && !this.state.tabFocused) this.n.show();
   }
 
   handleClick(event) {
@@ -49,8 +60,10 @@ class Chat extends Component {
   }
 
   addMessage = data => {
-    if (this.refs.chatRef)
+    if (this.refs.chatRef) {
       this.setState({ messages: [...this.state.messages, data], newMsg: data }, this.showNotifications);
+      if (!this.state.tabFocused) document.title = "* Chat App";
+    }
   }
 
   componentWillMount() {

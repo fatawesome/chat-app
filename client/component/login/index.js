@@ -4,6 +4,12 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { browserHistory, withRouter } from 'react-router';
 import * as userAction from '../../actions/users';
+import { reactLocalStorage } from 'reactjs-localstorage';
+
+// reactLocalStorage.set('var', true);
+// reactLocalStorage.get('var', true);
+// reactLocalStorage.setObject('var', {'test': 'test'});
+// reactLocalStorage.getObject('var');
 
 function validateEmail(email) {
   var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -17,15 +23,19 @@ class Login extends Component {
     this.state = {
       email: null,
       pass: null,
-      error: null
+      error: null,
+      isStore: false
     }
   }
 
   componentWillMount() {
-    let email="wendeveloper40@gmail.com";
-    let pass="12345678";
-    this.props.login(email, pass);
+
+    let oldState = reactLocalStorage.getObject('chatState');
+    oldState.error = null;
+    this.setState(oldState);
     const { currentUser, error } = this.props;
+
+    const userInfo = reactLocalStorage.getObject('state');
     if (!error && currentUser) browserHistory.push('/chat');
     if (error)
       this.setState({ error: error });
@@ -41,8 +51,7 @@ class Login extends Component {
   loginHandler() {
 
     event.preventDefault();
-
-    const { email, pass } = this.state;
+    const { email, pass, isStore } = this.state;
 
     if (!validateEmail(email)) {
       this.setState({ error: "Invalid Email format!" });
@@ -52,6 +61,12 @@ class Login extends Component {
     if (!pass) {
       this.setState({ error: "Invalid Password!" });
       return;
+    }
+
+    if (isStore) {
+      reactLocalStorage.setObject('chatState', this.state);
+    } else {
+      reactLocalStorage.clear();
     }
 
     this.props.login(email, pass);
@@ -73,8 +88,12 @@ class Login extends Component {
     });
   }
 
+  storeUserInfoIntoLocalStorage(e) {
+    this.setState({ isStore: e.target.checked })
+  }
+
   render() {
-    const { email, pass, error } = this.state;
+    const { email, pass, error, isStore } = this.state;
     return (
       <div className="container main">
         <div className="col-md-offset-4 col-md-4 login-form">
@@ -91,12 +110,18 @@ class Login extends Component {
               <div className="form-group field">
                 <span className="glyphicon air-icon-user"></span>
                 <input type="email" name="email" placeholder="Your email" className="form-control"
-                  onChange={this._onChangeMailHander.bind(this)} value={email||''} />
+                  onChange={this._onChangeMailHander.bind(this)} value={email || ''} />
               </div>
               <div className="form-group field">
                 <span className="glyphicon air-icon-password"></span>
                 <input type="password" name="pass" placeholder="Your password" className="form-control"
-                  onChange={this._onChangePassHander.bind(this)} value={pass||''} />
+                  onChange={this._onChangePassHander.bind(this)} value={pass || ''} />
+              </div>
+              <div className="form-group field">
+                <input type="checkbox" className="form-control remember-checkbox"
+                  checked={isStore} value={isStore} onChange={this.storeUserInfoIntoLocalStorage.bind(this)}
+                />
+                <label className="remember-checkbox-label">Remember Username and Password</label>
               </div>
               <div className="row button-area">
                 <div className="col-md-offset-1 col-md-5">

@@ -1,24 +1,20 @@
 import React, { Component } from 'react';
-
-export default class Header extends Component {
+import * as userAction from '../../../actions/users';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+class Header extends Component {
   constructor(props) {
     super(props);
   }
-
   render() {
     return (
       <nav className="navbar navbar-fixed-top navbar-inverse">
         <div className="container-fluid">
           <div className="navbar-header">
-            <a className="navbar-brand" href="#">WebSiteName</a>
+            <a className="navbar-brand" href={window.location.origin}>Chat App</a>
           </div>
-          <ul className="nav navbar-nav">
-            <li className="active"><a href="#">Home</a></li>
-            <li><a href="#">Page 1</a></li>
-            <li><a href="#">Page 2</a></li>
-          </ul>
           <ul className="nav navbar-nav navbar-right">
-            <li><a href="#"><span className="glyphicon air-icon-remove"></span>log Out</a></li>
+            <li><a onClick={() => { this.props.logOutUser() }}><span className="glyphicon air-icon-remove"></span>log Out</a></li>
           </ul>
         </div>
       </nav>
@@ -26,3 +22,19 @@ export default class Header extends Component {
 
   }
 }
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(userAction, dispatch);
+}
+
+function mapStateToProps(state) {
+  return {
+    currentUser: state.users.currentUser,
+    error: state.users.error
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Header);

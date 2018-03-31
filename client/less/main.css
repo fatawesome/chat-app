@@ -75,6 +75,17 @@ footer {
 .login-form .button-area a{
   min-width: 123px;
 }
+.login-form .remember-checkbox-label {
+  display: inline-block;
+  position: absolute;
+  top: 9px;
+}
+
+.login-form .remember-checkbox{
+  width: 15px;
+  height: 16px;
+  display: inline-block;
+}
 
 .main-chat-room {
   background-color:#f7f7f7;
@@ -84,6 +95,7 @@ footer {
   outline: 0;
   min-height: 20px;
   bottom: 50px;
+  top: 0px;
 }
 .main-chat-room .left-message{
   margin: 3px 15px;

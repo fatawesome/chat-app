@@ -1,44 +1,54 @@
-## Table of Contents
-- [Available Scripts](#available-scripts)
-  - [npm start](#npm-start)
-  - [npm test](#npm-test)
-  - [npm run build](#npm-run-build)
-  - [npm run eject](#npm-run-eject)
-- [Supported Browsers](#supported-browsers)
+# Chatting App
 
+A web application that allows users to send messages to friends. This is built by React.js, Node.js(Express.js) and WebPack.
 
-## Available Scripts
+For chatting, this app uses Socket.io.
 
-In the project directory, you can run:
+Backend:
 
-### `npm start`
+* Socket.io
+* Express.js
+* MongoDB
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Frontend:
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+* React.js
+* Redux (Router, Redux-thunk)
+* Socket.io
+* Webpack
 
-### `npm test`
+## Prerequisites
 
-Launches the test runner in the interactive watch mode.<br>
+You will need the following resources properly installed on the machine.
 
-### `npm run build`
+* [Git](https://git-scm.com)
+* [Node.js](https://nodejs.org) (with NPM)
+* [MongoDB](https://www.mongodb.com)
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Getting Started
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+```bash
+# Install the dependencies.
+$ cd .
+$ npm install
 
-## Supported Browsers
+### Run the App
 
-By default, the generated project uses the latest version of React.
+```bash
+$ cd .
+$ node server.js
+```
 
-You can refer [to the React documentation](https://reactjs.org/docs/react-dom.html#browser-support) for more information about supported browsers.
+By default, you can visit the API in your web browser at `http://localhost:3030`
 
-##Screenshots
-### Login componenent
-![alt text](screenshot/loginview.png "This screen is login compoenent.")
-### Sign componenent
-![alt text](screenshot/signview.png)
+## Screenshots
+
+### Login
+![image](screenshot/loginview.png)
+
+### Register
+![image](screenshot/signview.png)
+
+### Chat
+![image](screenshot/chatbox.png)
+
