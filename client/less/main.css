@@ -104,6 +104,19 @@ footer {
   float: left;
   border-radius: 8px;
 }
+.main-chat-room hr{
+  display: inline-block;
+  width: 40%;
+  position: relative;
+  bottom: -15px;
+  border-width: 2px;
+  border-color: #d5d4d4;
+}
+.main-chat-room span{
+  display: inline-block;
+  width: 20%;
+  text-align: center;
+}
 
 .sidenav {
   height: 100%;
