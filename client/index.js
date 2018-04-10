@@ -13,6 +13,7 @@ import Chat from './component/chat';
 import Login from './component/login';
 import SignUp from './component/signup'
 import Verify from './component/signup/verifiy'
+import WorkSpace from './component/workspace';
 
 const reducer = combineReducers({ ...reducers, routing: routerReducer });
 const store = createStore(reducer, applyMiddleware(thunk));
@@ -21,10 +22,12 @@ const history = syncHistoryWithStore(browserHistory, store)
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
-      <Route exact path="/" onEnter={() => browserHistory.push('/chat')} />
+      <Route exact path="/" onEnter={() => browserHistory.push('/workspace')} />
       <Route path="/login" component={Login} />
-      <Route path="/chat" component={Chat} />
+      <Route path="/messages/:workspace" component={Chat} />
+      <Route path="/workspace" component={WorkSpace} />
       <Route path="/signup" component={SignUp} />
       <Route path="/verify/:token/:id" component={Verify} />
+      <Route path="*" onEnter={() => browserHistory.push('/workspace')} />
     </Router>
   </Provider>, document.getElementById('root'));

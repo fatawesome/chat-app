@@ -53,6 +53,7 @@ const start = async () => {
 
         require('./server/route/users')(app, db, appConfig);
         require('./server/socket/soket')(server, db);
+        require('./server/route/workspace')(app, db);
         require('./server/route/upload')(app);
 
     } catch (e) {

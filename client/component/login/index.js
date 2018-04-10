@@ -6,11 +6,6 @@ import { browserHistory, withRouter } from 'react-router';
 import * as userAction from '../../actions/users';
 import { reactLocalStorage } from 'reactjs-localstorage';
 
-// reactLocalStorage.set('var', true);
-// reactLocalStorage.get('var', true);
-// reactLocalStorage.setObject('var', {'test': 'test'});
-// reactLocalStorage.getObject('var');
-
 function validateEmail(email) {
   var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
@@ -33,17 +28,19 @@ class Login extends Component {
     let oldState = reactLocalStorage.getObject('chatState');
     oldState.error = null;
     this.setState(oldState);
-    const { currentUser, error } = this.props;
+    const { currentUser, error, workspace } = this.props;
 
     const userInfo = reactLocalStorage.getObject('state');
-    if (!error && currentUser) browserHistory.push('/chat');
+
+    if (!workspace) browserHistory.push('/workspace');
+    if (!error && currentUser && workspace) browserHistory.push(`/messages/${workspace.displayName}`);
     if (error)
       this.setState({ error: error });
   }
 
   componentWillReceiveProps(nextProps) {
-    const { currentUser, error } = nextProps;
-    if (!error && currentUser) browserHistory.push('/chat');
+    const { currentUser, error,workspace} = nextProps;
+    if (!error && currentUser&&workspace) browserHistory.push(`/messages/${workspace.displayName}`);
     if (error)
       this.setState({ error: error });
   }
@@ -145,6 +142,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
   return {
     currentUser: state.users.currentUser,
+    workspace: state.workspace.workspace,
     error: state.users.error
   };
 }

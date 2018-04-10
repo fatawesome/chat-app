@@ -68,21 +68,22 @@ class Chat extends Component {
 
   componentWillMount() {
     if (!this.props.currentUser) {
-      browserHistory.push('/login');
+      browserHistory.push('/workspace');
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.currentUser) {
-      browserHistory.push('/login');
+      browserHistory.push('/workspace');
     }
   }
 
   render() {
     const { messages, newMsg } = this.state;
+    const { workspace } = this.props;
     return (
       <div className="main" ref="chatRef">
-        <Header />
+        <Header workspace={workspace} />
         <div className="container-fluid">
           <Room messages={messages} />
           <SideBar />
@@ -108,7 +109,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
   return {
-    currentUser: state.users.currentUser
+    currentUser: state.users.currentUser,
+    workspace: state.workspace.workspace,
   };
 }
 
