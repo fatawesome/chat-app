@@ -63,7 +63,7 @@ module.exports = (app, db, appConfig) => {
 
       if (!compareSync(pass, user.pass)) return res.send({ error: "Incorrect password!" });
 
-      if (!user.verified) return res.send({ error: "Not verified user!" })
+      // if (!user.verified) return res.send({ error: "Not verified user!" })
 
       const { _id, userName, birthday } = user;
 
